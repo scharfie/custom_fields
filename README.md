@@ -1,8 +1,7 @@
 # CustomFields
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/custom_fields`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A simple way of adding those "one-off" attributes/properties to any ActiveRecord model.  The custom fields are stored in a separate table (`custom_field_store`) and serialized to a
+single column (`custom_fields`) so only one row needs to be loaded from the database.
 
 ## Installation
 
@@ -16,21 +15,40 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
+Finally, run the generator (which will create a new migration):
 
-    $ gem install custom_fields
+    $ bin/rails generate custom_fields:install
+    $ rake db:migrate
 
 ## Usage
 
-TODO: Write usage instructions here
+In your models, simply include the module and then define the custom fields you want:
 
-## Development
+```ruby
+class User < ActiveRecord::Base
+  include CustomFields
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
+  custom_field :hometown
+  custom_field :gender
+end
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release` to create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+When you include `CustomFields`, an association named `custom_field_store` (`owner` from the perspective of `CustomFieldStore` model) is added with `has_one` relationship .  Then,
+each call to `custom_field` defines getter and setter methods which communication with the `custom_field_store`.
 
-## Contributing
+Also, you do not need to worry about manually instantiating the `custom_field_store`, as one will be built automatically if needed.
+
+You can get a list of all defined custom fields with `ClassName.custom_fields` e.g. `User.custom_fields`.
+
+## Ideas
+
+Possible ideas for future:
+
+- provide default values for custom fields?
+
+---
+
+##### Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/custom_fields/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
