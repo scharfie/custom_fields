@@ -1,11 +1,24 @@
 class CustomFieldStore < ActiveRecord::Base
-  self.table_name = "custom_field_store"
-  belongs_to :owner, :polymorphic => true
+  class Serializer
+    def self.load(raw)
+      return HashWithIndifferentAccess.new if raw.blank?
+      JSON.parse(raw, :object_class => HashWithIndifferentAccess)
+    end
 
-  serialize :custom_fields, JSON
+    def self.dump(data)
+      JSON.generate(data)
+    end
+  end
+
+  self.table_name = "custom_field_store"
+
+  belongs_to :owner, :polymorphic => true,
+    :inverse_of => :custom_field_store
+
+  serialize :custom_fields, Serializer
 
   def custom_fields
-    value = self[:custom_fields]
+    value = read_attribute(:custom_fields)
     
     case value
     when HashWithIndifferentAccess
@@ -16,6 +29,23 @@ class CustomFieldStore < ActiveRecord::Base
       value = HashWithIndifferentAccess.new
     end
 
-    self[:custom_fields] = value
+    write_attribute(:custom_fields, value)
+  end
+
+  def read_custom_field(name)
+    custom_fields[name]
+  end
+
+  def write_custom_field(name, value)
+    if custom_fields[name] != value
+      attribute_will_change! :custom_fields
+    end
+
+    custom_fields[name] = value
+  end
+
+  def needs_saved?
+    return false if new_record? && custom_fields.empty?
+    return changed?
   end
 end
