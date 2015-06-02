@@ -30,6 +30,10 @@ class User < ActiveRecord::Base
 
   custom_field :hometown
   custom_field :gender
+  
+  # If you are using Rails < 4 or `protected_attributes` gem, you may need to 
+  # make your custom fields accessible:
+  # attr_accessible :hometown, :gender
 end
 ```
 
