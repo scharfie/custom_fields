@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Chris Scharf"]
   spec.email         = ["scharfie@gmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q(Simple custom fields for Active Record, stored in separate table, serialized in JSON)
+  spec.description   = %q(Simple custom fields for Active Record, stored in separate table, serialized in JSON)
+  spec.homepage      = "https://github.com/scharfie/custom_fields"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
