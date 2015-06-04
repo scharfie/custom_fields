@@ -8,7 +8,7 @@ single column (`custom_fields`) so only one row needs to be loaded from the data
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'custom_fields'
+gem 'custom_fields', :github => "scharfie/custom_fields"
 ```
 
 And then execute:
