@@ -13,7 +13,8 @@ class CustomFieldStore < ActiveRecord::Base
   self.table_name = "custom_field_store"
 
   belongs_to :owner, :polymorphic => true,
-    :inverse_of => :custom_field_store
+    :inverse_of => :custom_field_store,
+    :touch => true
 
   serialize :custom_fields, Serializer
 

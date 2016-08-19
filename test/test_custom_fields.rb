@@ -33,4 +33,20 @@ class TestCustomFields < Minitest::Test
     assert_equal "Gotham", user.custom_field_store.read_custom_field(:hometown)
   end
 
+  def test_updating_custom_field_should_touch_owner
+    time = Time.new(2000, 1, 1)
+    user = User.create
+
+    user.created_at = time
+    user.updated_at = time
+    user.save
+
+    assert_equal time, user.created_at
+    assert_equal time, user.updated_at
+
+    user.custom_field_store.write_custom_field :hometown, "Gotham"
+    user.custom_field_store.save
+
+    refute_equal time, user.updated_at
+  end
 end

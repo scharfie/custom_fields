@@ -13,6 +13,8 @@ ActiveRecord::Schema.verbose = false
 ActiveRecord::Schema.define do
   create_table :users do |t|
     t.string :email
+    t.datetime :created_at
+    t.datetime :updated_at
   end
 
   create_table :custom_field_store do |t|
