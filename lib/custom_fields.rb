@@ -25,7 +25,8 @@ module CustomFields
   def self.included(base)
     base.extend ClassMethods
     base.has_one :custom_field_store, :as => :owner, :dependent => :destroy,
-      :inverse_of => :owner
+      :inverse_of => :owner,
+      :autosave => false
 
     base.after_save :persist_custom_fields
   end
@@ -33,7 +34,7 @@ module CustomFields
   # returns the custom field store associated object,
   # ensuring that one exists
   def custom_field_store
-    super || (self.custom_field_store = self.build_custom_field_store)
+    super || build_custom_field_store(:owner => self)
   end
 
   def persist_custom_fields
